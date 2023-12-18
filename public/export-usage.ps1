@@ -7,7 +7,7 @@ function Export-CopilotUsageTotals{
 
     process{
 
-        $usage = Get-CopilotUsage -Owner $Owner
+        $usage = Get-CopilotUsageOrg -Owner $Owner
 
         $csv = $usage | Convert-UsageToCsvTotals
 
@@ -30,7 +30,7 @@ function Export-CopilotUsageBreakdown{
 
     process{
 
-        $usage = Get-CopilotUsage -Owner $Owner
+        $usage = Get-CopilotUsageOrg -Owner $Owner
 
         $csv = $usage | Convert-UsageToCsvBreakdown
 
@@ -45,7 +45,7 @@ function Export-CopilotUsageBreakdown{
 } Export-ModuleMember -Function Export-CopilotUsageBreakdown
 
 
-function Get-CopilotUsage{
+function Get-CopilotUsageOrg{
     [CmdletBinding()]
     param(
         # owner
@@ -56,7 +56,7 @@ function Get-CopilotUsage{
 
         $owner = Get-EnvironmentOwner -Owner $Owner
 
-        $usageJson = Invoke-MyCommand -Command CopilotUsage -Parameters @{owner=$owner}
+        $usageJson = Invoke-MyCommand -Command CopilotUsageOrg -Parameters @{owner=$owner}
 
         $usage = $usageJson | ConvertFrom-Json -Depth 5
 
