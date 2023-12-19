@@ -1,8 +1,8 @@
-function Export-CopilotUsageTotals{
+function Export-CopilotUsageOrgTotals{
     [CmdletBinding()]
     param(
         [Parameter(Mandatory,ValueFromPipeline,ValueFromPipelineByPropertyName)][string]$Owner,
-        [Parameter()][string]$OutputFile
+        [Parameter(Mandatory)][string]$OutputFile
     )
 
     process{
@@ -11,20 +11,16 @@ function Export-CopilotUsageTotals{
 
         $csv = $usage | Convert-UsageToCsvTotals
 
-        if($OutputFile){
-            $csv | Out-File -FilePath $OutputFile
-        } else {
-            return $totals
-        }
+        $csv | Out-File -FilePath $OutputFile
     }
 
-} Export-ModuleMember -Function Export-CopilotUsageTotals
+} Export-ModuleMember -Function Export-CopilotUsageOrgTotals
 
-function Export-CopilotUsageBreakdown{
+function Export-CopilotUsageOrgBreakdown{
     [CmdletBinding()]
     param(
         [Parameter(Mandatory,ValueFromPipeline,ValueFromPipelineByPropertyName)][string]$Owner,
-        [Parameter()][string]$OutputFile
+        [Parameter(Mandatory)][string]$OutputFile
 
     )
 
@@ -34,16 +30,11 @@ function Export-CopilotUsageBreakdown{
 
         $csv = $usage | Convert-UsageToCsvBreakdown
 
-        if($OutputFile){
-            $csv | Out-File -FilePath $OutputFile
-        } else {
-            return $totals
-        }
+        $csv | Out-File -FilePath $OutputFile
 
     }
 
-} Export-ModuleMember -Function Export-CopilotUsageBreakdown
-
+} Export-ModuleMember -Function Export-CopilotUsageOrgBreakdown
 
 function Get-CopilotUsageOrg{
     [CmdletBinding()]
@@ -62,8 +53,46 @@ function Get-CopilotUsageOrg{
 
         return $usage
     }
-}
+} Export-ModuleMember -Function Get-CopilotUsageOrg
 
+function Get-CopilotUsageEnterprise{
+    [CmdletBinding()]
+    param(
+        # owner
+        [Parameter(Mandatory,ValueFromPipeline,ValueFromPipelineByPropertyName)][string]$Enterprise
+    )
+
+    process{
+
+        $owner = Get-EnvironmentEnterprise -Enterprise $Enterprise
+
+        $usageJson = Invoke-MyCommand -Command CopilotUsageEnterprise -Parameters @{enterprise=$Enterprise}
+
+        $usage = $usageJson | ConvertFrom-Json -Depth 5
+
+        return $usage
+    }
+} Export-ModuleMember -Function Get-CopilotUsageEnterprise
+
+function Export-CopilotUsageEnterpriseBreakdown{
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory,ValueFromPipeline,ValueFromPipelineByPropertyName)][string]$Enterprise,
+        [Parameter(Mandatory)][string]$OutputFile
+
+    )
+
+    process{
+
+        $usage = Get-CopilotUsageEnterprise -Enterprise $Enterprise
+
+        $csv = $usage | Convert-UsageToCsvBreakdown
+
+        $csv | Out-File -FilePath $OutputFile
+
+    }
+
+} Export-ModuleMember -Function Export-CopilotUsageEnterpriseBreakdown
 
 function Convert-UsageToCsvTotals{
     [CmdletBinding()]
