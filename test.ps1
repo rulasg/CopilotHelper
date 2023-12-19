@@ -47,6 +47,7 @@ function Import-RequiredModules{
         [Parameter()][switch]$PassThru
     )
     process{
+        "Importing module Name[{0}] Version[{1}] AllowPrerelease[{2}]" -f $Name, $Version, $AllowPrerelease | Write-Host -ForegroundColor DarkGray
 
         if ($Version) {
             $V = $Version.Split('-')
@@ -57,6 +58,7 @@ function Import-RequiredModules{
         $module = Import-Module $Name -PassThru -ErrorAction SilentlyContinue -RequiredVersion:$semVer
         
         if ($null -eq $module) {
+            "Installing module Name[{0}] Version[{1}] AllowPrerelease[{2}]" -f $Name, $Version, $AllowPrerelease | Write-Host -ForegroundColor DarkGray
             $installed = Install-Module -Name $Name -Force -AllowPrerelease:$AllowPrerelease -passThru -RequiredVersion:$Version
             $module = Import-Module -Name $installed.Name -RequiredVersion ($installed.Version.Split('-')[0]) -Force -PassThru
         }
@@ -76,7 +78,7 @@ $requiredModule = $localPath | Join-Path -child "*.psd1" |  Get-Item | Import-Po
 $requiredModule | Import-RequiredModules -AllowPrerelease
 
 if($TestName){
-    Invoke-TestingHelper -TestName $TestName
+    Invoke-TestingHelper -TestName $TestName -ShowTestErrors:$ShowTestErrors
 } else {
-    Invoke-TestingHelper 
+    Invoke-TestingHelper -ShowTestErrors:$ShowTestErrors
 }
