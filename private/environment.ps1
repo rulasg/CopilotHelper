@@ -8,7 +8,7 @@ function Get-EnvironmentOwner{
         [Parameter()] [string]$Owner
     )
 
-    # Default owner 
+    # Default owner
     if([string]::IsNullOrWhiteSpace($Owner)){
         $Owner = $DEFAULT_OWNER
     }
@@ -21,7 +21,7 @@ function Get-EnvironmentEnterprise{
         [Parameter()] [string]$Enterprise
     )
 
-    # Default owner 
+    # Default owner
     if([string]::IsNullOrWhiteSpace($Enterprise)){
         $Enterprise = $DEFAULT_ENTERPRISE
     }

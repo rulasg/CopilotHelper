@@ -1,3 +1,8 @@
+<#
+.SYNOPSIS
+    Export daily totals Copilot usage data of an organization to CSV.
+#>
+
 function Export-CopilotUsageOrgTotals{
     [CmdletBinding()]
     param(
@@ -16,6 +21,10 @@ function Export-CopilotUsageOrgTotals{
 
 } Export-ModuleMember -Function Export-CopilotUsageOrgTotals
 
+<#
+.SYNOPSIS
+    Export daily breakdown Copilot usage data of an organization to CSV.
+#>
 function Export-CopilotUsageOrgBreakdown{
     [CmdletBinding()]
     param(
@@ -36,6 +45,10 @@ function Export-CopilotUsageOrgBreakdown{
 
 } Export-ModuleMember -Function Export-CopilotUsageOrgBreakdown
 
+<#
+.SYNOPSIS
+    Gets daily Copilot usage data of an organization.
+#>
 function Get-CopilotUsageOrg{
     [CmdletBinding()]
     param(
@@ -55,6 +68,10 @@ function Get-CopilotUsageOrg{
     }
 } Export-ModuleMember -Function Get-CopilotUsageOrg
 
+<#
+.SYNOPSIS
+    Gets daily Copilot usage data of an enterprise.
+#>
 function Get-CopilotUsageEnterprise{
     [CmdletBinding()]
     param(
@@ -64,7 +81,7 @@ function Get-CopilotUsageEnterprise{
 
     process{
 
-        $owner = Get-EnvironmentEnterprise -Enterprise $Enterprise
+        $Enterprise = Get-EnvironmentEnterprise -Enterprise $Enterprise
 
         $usageJson = Invoke-MyCommand -Command CopilotUsageEnterprise -Parameters @{enterprise=$Enterprise}
 
@@ -74,6 +91,10 @@ function Get-CopilotUsageEnterprise{
     }
 } Export-ModuleMember -Function Get-CopilotUsageEnterprise
 
+<#
+.SYNOPSIS
+    Export daily breakdown Copilot usage data of an enterprise to CSV.
+#>
 function Export-CopilotUsageEnterpriseBreakdown{
     [CmdletBinding()]
     param(
@@ -94,6 +115,10 @@ function Export-CopilotUsageEnterpriseBreakdown{
 
 } Export-ModuleMember -Function Export-CopilotUsageEnterpriseBreakdown
 
+<#
+.SYNOPSIS
+    Covnerts the totals of Copilot usage data to CSV.
+#>
 function Convert-UsageToCsvTotals{
     [CmdletBinding()]
     param(
@@ -123,6 +148,10 @@ function Convert-UsageToCsvTotals{
     }
 }
 
+<#
+.SYNOPSIS
+    Covnerts the breakdown of Copilot usage data to CSV.
+#>
 function Convert-UsageToCsvBreakdown{
     [CmdletBinding()]
     param(
