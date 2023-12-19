@@ -9,9 +9,8 @@ $dataResultsBreakdownOrg = 237
 $dataResultsBreakdownEnterprise = 474
 $dataResultLanguages = 35
 
-# Mock
-Set-InvokeCommandAlias -Alias CopilotUsageOrg -Command "Get-Content -Path $(($OrgTestDataFile | Get-Item).FullName)"
-Set-InvokeCommandAlias -Alias CopilotUsageEnterprise -Command "Get-Content -Path $(($EnterpriseTestDataFile | Get-Item).FullName)"
+Set-InvokeCommandAlias -Alias 'gh api orgs/someOrgName/copilot/usage'                -Command "Get-Content -Path $(($OrgTestDataFile | Get-Item).FullName)"
+Set-InvokeCommandAlias -Alias 'gh api enterprises/someEnterpriseName/copilot/usage'  -Command "Get-Content -Path $(($EnterpriseTestDataFile | Get-Item).FullName)"
 
 # Tests
 
@@ -52,7 +51,7 @@ function CopilotHelperTest_ExportCopilotUsageOrg_Breakdown{
 
 function CopilotHelperTest_CopilotUsagEnterprise_Get{
 
-    $result = Get-CopilotUsageEnterprise -Enterprise 'someEnterpriseName'
+    $result = Get-CopilotUsageEnterprise -Enterprise someEnterpriseName
 
     Assert-Count -Expected $dataResultsTotals -Presented $result
     Assert-Count -Expected $dataResultsBreakdownEnterprise -Presented $result.breakdown
