@@ -132,13 +132,18 @@ function Convert-UsageToCsvTotals{
     process {
 
         $entries += @{
+            entry_type = "Total"
+            day = $Entry.day
+            # Data from API
+            total_active_users = $Entry.total_active_users
             total_suggestions_count = $Entry.total_suggestions_count
             total_acceptances_count = $Entry.total_acceptances_count
             total_lines_suggested = $Entry.total_lines_suggested
             total_lines_accepted = $Entry.total_lines_accepted
-            total_active_users = $Entry.total_active_users
-            day = $Entry.day
-            entry_type = "Total"
+
+            # Extra calculations
+            total_ratio_count = Get-Ratio $Entry.total_acceptances_count  $Entry.total_suggestions_count
+            total_ratio_lines = Get-Ratio $Entry.total_lines_accepted  $Entry.total_lines_suggested
         }
     }
 
@@ -155,7 +160,7 @@ function Convert-UsageToCsvTotals{
 function Convert-UsageToCsvBreakdown{
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory,ValueFromPipeline)][Object]$Entry
+        [Parameter(Mandatory,ValueFromPipeline)][PSCustomObject]$Entry
     )
 
     begin {
@@ -165,15 +170,19 @@ function Convert-UsageToCsvBreakdown{
     process {
         $entries += $Entry.breakdown | ForEach-Object {
             @{
+                entry_type = "Breakdown"
+                day = $Entry.day
                 language = $_.language
                 editor = $_.editor
+                active_users = $_.active_users
                 suggestions_count = $_.suggestions_count
                 acceptances_count = $_.acceptances_count
                 lines_suggested = $_.lines_suggested
                 lines_accepted = $_.lines_accepted
-                active_users = $_.active_users
-                day = $Entry.day
-                entry_type = "Breakdown"
+
+                # Extra calculations
+                ratio_count = Get-Ratio $_.acceptances_count $_.suggestions_count
+                ratio_lines = Get-Ratio $_.lines_accepted  $_.lines_suggested
             }
         }
     }
@@ -182,4 +191,20 @@ function Convert-UsageToCsvBreakdown{
         $csv = $entries | ConvertTo-Csv -NoTypeInformation
         return $csv
     }
+}
+
+function Get-Ratio($a, $b){
+
+    if($null -eq $a -or $null -eq $b){
+        return 0
+    }
+
+    # parse $a and $b
+    $a = [int64]$a
+    $b = [int64]$b
+
+    if($b -eq 0){
+        return 0
+    }
+    return $a / $b
 }
