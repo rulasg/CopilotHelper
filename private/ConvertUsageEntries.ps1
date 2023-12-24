@@ -4,6 +4,7 @@
 #>
 function Convert-UsageToTotals{
     [CmdletBinding()]
+    [OutputType([hashtable])]
     param(
         [Parameter(Mandatory,ValueFromPipeline)][Object]$Entry
     )

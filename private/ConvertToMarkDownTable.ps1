@@ -28,23 +28,27 @@ function Get-MarkdownHeadersTotal{
         [Parameter(Mandatory,ValueFromPipeline)][PSCustomObject]$InputObject
 
     )
-    
-    $l1 = ""
-    $l2 = ""
 
-    $InputObject.Keys | ForEach-Object{
-        $l1 += "| $_ "
-        $l2 += "| --- "
+    process {
+
+        $l1 = ""
+        $l2 = ""
+
+        $InputObject.Keys | ForEach-Object{
+            $l1 += "| $_ "
+            $l2 += "| --- "
+        }
+        $l1 += "|"
+        $l2 += "|"
+
+        $l1 | Write-Output
+        $l2 | Write-Output
     }
-    $l1 += "|"
-    $l2 += "|"
-
-    $l1 | Write-Output
-    $l2 | Write-Output
 }
 
 function Get-UsageBreakdownToMarkdownLine{
     [CmdletBinding()]
+    [OutputType([string])]
     param(
         [Parameter(Mandatory,ValueFromPipeline)][PSCustomObject]$Entry
     )
