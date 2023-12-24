@@ -43,27 +43,3 @@ function Get-CopilotUsageEnterprise{
         return $usage
     }
 } Export-ModuleMember -Function Get-CopilotUsageEnterprise
-
-<#
-.SYNOPSIS
-    Export daily breakdown Copilot usage data of an enterprise to CSV.
-#>
-function Export-CopilotUsageEnterpriseBreakdown{
-    [CmdletBinding()]
-    param(
-        [Parameter(Mandatory,ValueFromPipeline,ValueFromPipelineByPropertyName)][string]$Enterprise,
-        [Parameter(Mandatory)][string]$OutputFile
-
-    )
-
-    process{
-
-        $usage = Get-CopilotUsageEnterprise -Enterprise $Enterprise
-
-        $csv = $usage | Convert-UsageToCsvBreakdown
-
-        $csv | Out-File -FilePath $OutputFile
-
-    }
-
-} Export-ModuleMember -Function Export-CopilotUsageEnterpriseBreakdown
