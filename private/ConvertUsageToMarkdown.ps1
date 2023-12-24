@@ -1,8 +1,8 @@
 <#
 .SYNOPSIS
-    Covnerts the totals of Copilot usage data to CSV.
+    Covnerts the totals of Copilot usage data to Markdown Table.
 #>
-function Convert-UsageToCsvTotals{
+function Convert-UsageToMarkdownTotals{
     [CmdletBinding()]
     param(
         [Parameter(Mandatory,ValueFromPipeline)][Object]$Entry
@@ -18,16 +18,16 @@ function Convert-UsageToCsvTotals{
     }
 
     end {
-        $csv = $entries | ConvertTo-Csv -NoTypeInformation
-        return $csv
+        $markdown = $entries | ConvertTo-MarkdownTable
+        return $markdown
     }
 }
 
 <#
 .SYNOPSIS
-    Covnerts the breakdown of Copilot usage data to CSV.
+    Covnerts the breakdown of Copilot usage data to Markdown Table.
 #>
-function Convert-UsageToCsvBreakdown{
+function Convert-UsageToMarkdownBreakdown{
     [CmdletBinding()]
     param(
         [Parameter(Mandatory,ValueFromPipeline)][PSCustomObject]$Entry
@@ -42,7 +42,7 @@ function Convert-UsageToCsvBreakdown{
     }
 
     end {
-        $csv = $entries | ConvertTo-Csv -NoTypeInformation
-        return $csv
+        $markdown = $entries | ConvertTo-MarkdownTable
+        return $markdown
     }
 }
