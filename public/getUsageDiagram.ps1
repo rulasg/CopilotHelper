@@ -34,7 +34,7 @@ function Get-CopilotUsageOrgDiagramBreakdown{
 
         $usage = Get-CopilotUsageOrg -Owner $Owner
 
-        $markdown = $usage | Convert-UsageToMarkdownBreakdown
+        $markdown = $usage | Convert-UsageToDiagramBreakdown
 
         return $markdown
 
@@ -57,7 +57,7 @@ function Get-CopilotUsageEnterpriseDiagramBreakdown{
 
         $usage = Get-CopilotUsageEnterprise -Enterprise $Enterprise
 
-        $markdown = $usage | Convert-UsageToMarkdownBreakdown
+        $markdown = $usage | Convert-UsageToDiagramBreakdown
 
         return $markdown
 

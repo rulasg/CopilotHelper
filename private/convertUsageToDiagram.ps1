@@ -34,7 +34,7 @@ function Convert-UsageToDiagramTotals{
             Total = $cals_total_suggestions_count.total
             Positive = $cals_total_acceptances_count.total
         }
-        $markdown = ConvertTo-MermaidPieTotalAndTrue @param | Convert-MermaidToMarkdown
+        $markdown = ConvertTo-MermaidPieTotalAndPositive @param | Convert-MermaidToMarkdown
 
         # Accepted Lines
         $title = "Acceptance Lines"
@@ -44,7 +44,7 @@ function Convert-UsageToDiagramTotals{
             Total = $cals_total_lines_suggested.total
             Positive = $cals_total_lines_accepted.total
         }
-        $markdown += ConvertTo-MermaidPieTotalAndTrue @param | Convert-MermaidToMarkdown
+        $markdown += ConvertTo-MermaidPieTotalAndPositive @param | Convert-MermaidToMarkdown
 
         return $markdown
     }
@@ -57,7 +57,7 @@ function Convert-UsageToDiagramTotals{
 function Convert-UsageToDiagramBreakdown{
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory,ValueFromPipeline)][PSCustomObject]$Entry
+        [Parameter(Mandatory,ValueFromPipeline)][Object]$Entry
     )
 
     begin {
@@ -65,11 +65,20 @@ function Convert-UsageToDiagramBreakdown{
     }
 
     process {
+
         $entries += $Entry | Convert-UsageToBreakdown
     }
 
     end {
-        $markdown = $entries | ConvertTo-MarkdownTable
+        $markdown =@()
+        $calcsByLanguage = Get-CalcsByProperty language $entries
+
+        # Active Users
+        $markdown += $calcsByLanguage | ConvertTo-MermmaidPieTopPercentage -TargetAttribute active_users | Convert-MermaidToMarkdown
+        
+        # Accepted Lines
+        $markdown += $calcsByLanguage | ConvertTo-MermmaidPieTopPercentage -TargetAttribute lines_accepted | Convert-MermaidToMarkdown
+    
         return $markdown
     }
 }
