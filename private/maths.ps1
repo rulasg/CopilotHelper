@@ -13,3 +13,21 @@ function Get-Ratio($a, $b){
     }
     return $a / $b
 }
+
+function Get-Calcs($a){
+
+    # iterate $a and calculate agerage, total and count
+    $total = 0
+    $count = 0
+    $a | ForEach-Object{
+        $total += $_
+        $count += 1
+    }
+    $average = $total / $count
+
+    return @{
+        average = $average
+        total = $total
+        count = $count
+    }
+}
