@@ -71,7 +71,7 @@ function Convert-UsageToDiagramBreakdown{
 
     end {
         $markdown =@()
-        $calcsByLanguage = Get-CalcsByProperty language $entries
+        $calcsByLanguage = Get-CalcsByProperty2 language $entries
 
         # Active Users
         $markdown += $calcsByLanguage | ConvertTo-MermmaidPieTopPercentage -TargetAttribute active_users | Convert-MermaidToMarkdown
