@@ -13,7 +13,7 @@ function ConvertTo-MermaidPieTotalAndPositive{
             "Not $Name" = $($Total - $Positive)
         }
         $mermaid = ConvertTo-MermaidPie -Title $Title -Data $data
-        
+
         return $mermaid
     }
 }

@@ -25,7 +25,7 @@ function Convert-UsageToDiagramLanguageQuadrant{
         # Language Quadrant
 
         $mermaid = $calcsByLanguage | ConvertTo-MermaidQuadrant -Title "Languages Efficiency"
-        
+
         $markdown = $mermaid | Convert-MermaidToMarkdown
 
         return $markdown

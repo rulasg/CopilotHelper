@@ -52,12 +52,12 @@ function ConvertTo-MermaidQuadrant{
             } else {
                 $zeroes[$_.Key] = ToCoordenates $x $y
             }
- 
+
         }
 
         #Others
         if($others.Count -gt 0){
-            $othersX = $others.Values.x | Measure-Object -Average | Select-Object -ExpandProperty Average 
+            $othersX = $others.Values.x | Measure-Object -Average | Select-Object -ExpandProperty Average
             $othersY = $others.Values.y | Measure-Object -Average | Select-Object -ExpandProperty Average
             $toPaint["Others"] += ToCoordenates $othersX $othersY
         }
@@ -66,16 +66,16 @@ function ConvertTo-MermaidQuadrant{
 
         $maxX = $toPaint.Values.x | Measure-Object -Maximum | Select-Object -ExpandProperty Maximum
         $maxY = $toPaint.Values.y | Measure-Object -Maximum | Select-Object -ExpandProperty Maximum
-        
+
         $toPaint.GetEnumerator() | ForEach-Object {
             $x =  $_.Value.x * $maxratio / $maxX | Get-Round
             $y = $_.Value.x  * $maxratio / $maxY | Get-Round
 
             $mermaid += $itemPattern -f $_.Key,$x,$y
         }
-        
+
         $ret = $mermaid | Out-String
-        
+
         return $ret
     }
 }
