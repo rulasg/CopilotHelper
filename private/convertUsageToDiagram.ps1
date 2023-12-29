@@ -23,9 +23,9 @@ function Convert-UsageToDiagramTotals{
         $cals_total_acceptances_count = Get-Calcs $entries.total_acceptances_count
         $cals_total_lines_suggested = Get-Calcs $entries.total_lines_suggested
         $cals_total_lines_accepted = Get-Calcs $entries.total_lines_accepted
-        
+
         $markdown =@()
-        
+
         # Accepted Count
         $title = "Acceptance Count"
         $param = @{
@@ -75,10 +75,10 @@ function Convert-UsageToDiagramBreakdown{
 
         # Active Users
         $markdown += $calcsByLanguage | ConvertTo-MermmaidPieTopPercentage -TargetAttribute active_users | Convert-MermaidToMarkdown
-        
+
         # Accepted Lines
         $markdown += $calcsByLanguage | ConvertTo-MermmaidPieTopPercentage -TargetAttribute lines_accepted | Convert-MermaidToMarkdown
-    
+
         return $markdown
     }
 }

@@ -6,14 +6,16 @@ function ConvertTo-MermaidPieTotalAndPositive{
         [Parameter(Mandatory,ValueFromPipelineByPropertyName)][int64]$Total,
         [Parameter(Mandatory,ValueFromPipelineByPropertyName)][int64]$Positive
     )
+    process{
 
-    $data = [ordered]@{
-        "$Name" = $Positive
-        "Not $Name" = $($Total - $Positive)
+        $data = [ordered]@{
+            "$Name" = $Positive
+            "Not $Name" = $($Total - $Positive)
+        }
+        $mermaid = ConvertTo-MermaidPie -Title $Title -Data $data
+        
+        return $mermaid
     }
-    $mermaid = ConvertTo-MermaidPie -Title $Title -Data $data
-
-    return $mermaid
 }
 
 function ConvertTo-MermmaidPieTopPercentage{
@@ -29,14 +31,14 @@ function ConvertTo-MermmaidPieTopPercentage{
 
     process{
         $languages = @{}
-        
+
         $calcsByLanguage.GetEnumerator() | ForEach-Object {
             $languages[$_.Name] = $_.Value.$TargetAttribute.total
         }
         $data = $languages | Select-Top $TopPercentage | Format-HashTablesByValue
-        
+
         $total = $languages.Values | Measure-Object -Sum | Select-Object -ExpandProperty Sum
-        
+
         $title = "$TargetAttribute [$total]"
 
         $mermaid += ConvertTo-MermaidPie -Title $title -Data $data

@@ -122,7 +122,7 @@ function CopilotHelperTest_GetCopilotUsageDiagramEnterprise_Breakdown{
         # Lines
         'title lines_accepted [11710]',
         '"Other": 2740'
-        
+
     ) | ForEach-Object {
         Assert-IsTrue -Condition $($result[0].Contains($_) -or $result[1].Contains($_))
     }
