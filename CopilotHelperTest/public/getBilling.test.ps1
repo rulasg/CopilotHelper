@@ -3,7 +3,7 @@ function CopilotHelperTest_GetBilling {
     $owner = 'mockorg'
 
     $GetBilling = $PSScriptRoot | Join-Path -ChildPath 'testData' -AdditionalChildPath 'CopilotBillingOrg.json'
-    Set-InvokeCommandAlias -Alias "gh api /orgs/$owner/copilot/billing" -Command "Get-Content -Path $(($GetBilling | Get-Item).FullName)"
+    Set-InvokeCommandMock -Alias "gh api /orgs/$owner/copilot/billing" -Command "Get-Content -Path $(($GetBilling | Get-Item).FullName)"
 
     $result = Get-CopilotBilling -Owner $owner
 
@@ -27,7 +27,7 @@ function CopilotHelperTest_GetBilling_NotFound{
     $owner = 'mockorg'
 
     $GetBilling = $PSScriptRoot | Join-Path -ChildPath 'testData' -AdditionalChildPath 'CopilotBillingOrgWrongOrg.json'
-    Set-InvokeCommandAlias -Alias "gh api /orgs/$owner/copilot/billing" -Command "Get-Content -Path $(($GetBilling | Get-Item).FullName)"
+    Set-InvokeCommandMock -Alias "gh api /orgs/$owner/copilot/billing" -Command "Get-Content -Path $(($GetBilling | Get-Item).FullName)"
 
     $result = Get-CopilotBilling -Owner $owner
 
@@ -41,8 +41,8 @@ function CopilotHelperTest_GetBilling_Multiple_Orgs{
 
     $mockResult = $PSScriptRoot | Join-Path -ChildPath 'testData' -AdditionalChildPath 'CopilotBillingOrg.json'
     
-    Set-InvokeCommandAlias -Alias "gh api /orgs/$owner1/copilot/billing" -Command "Get-Content -Path $(($mockResult | Get-Item).FullName)"
-    Set-InvokeCommandAlias -Alias "gh api /orgs/$owner2/copilot/billing" -Command "Get-Content -Path $(($mockResult | Get-Item).FullName)"
+    Set-InvokeCommandMock -Alias "gh api /orgs/$owner1/copilot/billing" -Command "Get-Content -Path $(($mockResult | Get-Item).FullName)"
+    Set-InvokeCommandMock -Alias "gh api /orgs/$owner2/copilot/billing" -Command "Get-Content -Path $(($mockResult | Get-Item).FullName)"
 
     $result = $owner1,$owner2 | Get-CopilotBilling
 
