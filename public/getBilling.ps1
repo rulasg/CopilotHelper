@@ -1,4 +1,4 @@
-Set-InvokeCommandAlias -Alias CopilotBilling -Command 'gh api /orgs/{owner}/copilot/billing'
+Set-MyInvokeCommandAlias -Alias CopilotBilling -Command 'gh api /orgs/{owner}/copilot/billing'
 
 <#
 .SYNOPSIS
