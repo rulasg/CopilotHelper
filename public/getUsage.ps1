@@ -1,5 +1,5 @@
-Set-InvokeCommandAlias -Alias CopilotUsageOrg        -Command 'gh api orgs/{owner}/copilot/usage'
-Set-InvokeCommandAlias -Alias CopilotUsageEnterprise -Command 'gh api enterprises/{enterprise}/copilot/usage'
+Set-MyInvokeCommandAlias -Alias CopilotUsageOrg        -Command 'gh api orgs/{owner}/copilot/usage'
+Set-MyInvokeCommandAlias -Alias CopilotUsageEnterprise -Command 'gh api enterprises/{enterprise}/copilot/usage'
 
 <#
 .SYNOPSIS
