@@ -54,7 +54,7 @@ function Invoke-DeployModuleToPSGallery{
     if ($Force -and -not $Confirm){
         $ConfirmPreference = 'None'
     }
-    
+
     # Deploy the module with ShouldProcess (-whatif, -confirm)
     if ($PSCmdlet.ShouldProcess($psdPath, "Invoke-DeployModule")) {
         "Deploying {0} {1} {2} to PSGallery ..." -f $($psd1.RootModule), $($psd1.ModuleVersion), $($psd1.PrivateData.pSData.Prerelease) | Write-Information
@@ -78,14 +78,21 @@ function Install-Dependencies{
 
     $requiredModules = $ModuleManifestPath | Get-Item | Import-PowerShellDataFile | Select-Object -ExpandProperty requiredModules
 
-    foreach ($requiredModule in $requiredModules) {
-        $module = Import-Module -Name $requiredModule -PassThru -ErrorAction SilentlyContinue
+    foreach ($module in $requiredModules) {
+
+        #Check if requiredModule specification is a hashtable
+        if($module -is [hashtable]){
+            $requiredModule = $module.ModuleName
+            $requiredVersion = $module.ModuleVersion
+        }
+
+        $module = Import-Module -Name $requiredModule -RequiredVersion:$requiredVersion -PassThru -ErrorAction SilentlyContinue
 
         if ($null -eq $module) {
             "Installing module $requiredModule" | Write-Host -ForegroundColor DarkGray
-            Install-Module -Name $requiredModule -Force -AllowPrerelease
-            $module = Import-Module -Name $requiredModule -PassThru
-            "Loaded module Name[$($module.Name)] Version[$($module.Version)]" | Write-Host -ForegroundColor DarkGray
+            Install-Module -Name $requiredModule -Force -AllowPrerelease -RequiredVersion:$requiredVersion
+            $module = Import-Module -Name $requiredModule -RequiredVersion:$requiredVersion -PassThru
+            "Loaded module Name[{0}] Version[{1}] PreRelease[{2}]" -f $module.Name, $module.Version, $module.privatedata.psdata.prerelease | Write-Host -ForegroundColor DarkGray
         }
     }
 }
@@ -105,8 +112,8 @@ function Update-DeployModuleManifest {
     # if ($PSCmdlet.ShouldProcess($parameters.Path, "Update-ModuleManifest with ModuleVersion:{0} Prerelease:{1}" -f $parameters.ModuleVersion, $parameters.Prerelease)) {
     if ($PSCmdlet.ShouldProcess($parameters.Path, "Update-ModuleManifest with $versionTag")) {
         "Updating module manifest with version tag [$VersionTag] ..." | Write-Information
-        Update-ModuleManifest  @parameters   
-        
+        Update-ModuleManifest  @parameters
+
     } else {
         Write-Warning -Message "Update-ModuleManifest skipped. Any PSD1 deploy will not have the proper version."
     }
@@ -118,7 +125,7 @@ function Update-DeployModuleManifest {
         Write-Error -Message "Failed to update module manifest with version tag [$VersionTag]"
         exit 1
     }
-} 
+}
 
 function script:Invoke-DeployModule {
     [CmdletBinding()]
@@ -143,7 +150,7 @@ function script:Invoke-DeployModule {
         Write-Error -Message "Failed to deploy module [$Name] to PSGallery"
         exit 1
     }
-} 
+}
 
 function Get-DeployModuleVersion {
     [CmdletBinding()]
@@ -151,7 +158,7 @@ function Get-DeployModuleVersion {
         [Parameter(Mandatory=$true)][string]$VersionTag
     )
 
-    $version = $VersionTag.split('-')[0] 
+    $version = $VersionTag.split('-')[0]
     #remove all leters from $version
     $version = $version -replace '[a-zA-Z_]'
     $version
@@ -164,8 +171,8 @@ function Get-DeployModulePreRelease {
     )
 
     $preRelease = $VersionTag.split('-')[1]
-    # to clear the preRelease by Update-ModuleManifest 
-    # preRelease must be a string with a space. 
+    # to clear the preRelease by Update-ModuleManifest
+    # preRelease must be a string with a space.
     # $null or [string]::Empty leaves the value that has.
     $preRelease = $preRelease ?? " "
     $preRelease
