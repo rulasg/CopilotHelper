@@ -1,3 +1,6 @@
+Set-MyInvokeCommandAlias -Alias CopilotUsageOrg        -Command 'gh api orgs/{owner}/copilot/usage'
+Set-MyInvokeCommandAlias -Alias CopilotUsageEnterprise -Command 'gh api enterprises/{enterprise}/copilot/usage'
+
 <#
 .SYNOPSIS
     Gets daily Copilot usage data of an organization.

@@ -1,6 +1,10 @@
 #Module path is where resides the RootModule file. This file. :)
 $MODULE_PATH = $PSScriptRoot
 
+# Import START
+$START = $MODULE_PATH | Join-Path -ChildPath "private" -AdditionalChildPath 'START.ps1'
+if($START | Test-Path){ . $($START | Get-Item).FullName }
+
 #Get public and private function definition files.
 $Public  = @( Get-ChildItem -Path $MODULE_PATH\public\*.ps1 -ErrorAction SilentlyContinue )
 $Private = @( Get-ChildItem -Path $MODULE_PATH\private\*.ps1 -ErrorAction SilentlyContinue )
@@ -23,3 +27,4 @@ Foreach($import in @($Public + $Private))
 # Export Public functions ($Public.BaseName) for WIP modules
 # Set variables visible to the module and its functions only
 
+Disable-InvokeCommandAlias -Tag CopilotHelperModule
