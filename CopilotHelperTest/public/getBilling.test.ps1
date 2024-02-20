@@ -1,9 +1,10 @@
 function CopilotHelperTest_GetBilling {
 
+    Reset-InvokeCommandMock
+
     $owner = 'mockorg'
 
-    $GetBilling = $PSScriptRoot | Join-Path -ChildPath 'testData' -AdditionalChildPath 'CopilotBillingOrg.json'
-    Set-InvokeCommandMock -Alias "gh api /orgs/$owner/copilot/billing" -Command "Get-Content -Path $(($GetBilling | Get-Item).FullName)"
+    MockCall -Command "gh api /orgs/$owner/copilot/billing" -filename 'CopilotBillingOrg.json'
 
     $result = Get-CopilotBilling -Owner $owner
 
@@ -24,10 +25,11 @@ function CopilotHelperTest_GetBilling {
 
 function CopilotHelperTest_GetBilling_NotFound{
 
+    Reset-InvokeCommandMock
+
     $owner = 'mockorg'
 
-    $GetBilling = $PSScriptRoot | Join-Path -ChildPath 'testData' -AdditionalChildPath 'CopilotBillingOrgWrongOrg.json'
-    Set-InvokeCommandMock -Alias "gh api /orgs/$owner/copilot/billing" -Command "Get-Content -Path $(($GetBilling | Get-Item).FullName)"
+    MockCall -Command "gh api /orgs/$owner/copilot/billing" -filename 'CopilotBillingOrgWrongOrg.json'
 
     $result = Get-CopilotBilling -Owner $owner
 
@@ -36,18 +38,17 @@ function CopilotHelperTest_GetBilling_NotFound{
 
 function CopilotHelperTest_GetBilling_Multiple_Orgs{
 
+    Reset-InvokeCommandMock
+
     $owner1 = 'mockorg1'
     $owner2 = 'mockorg2'
 
-    $mockResult = $PSScriptRoot | Join-Path -ChildPath 'testData' -AdditionalChildPath 'CopilotBillingOrg.json'
-    
-    Set-InvokeCommandMock -Alias "gh api /orgs/$owner1/copilot/billing" -Command "Get-Content -Path $(($mockResult | Get-Item).FullName)"
-    Set-InvokeCommandMock -Alias "gh api /orgs/$owner2/copilot/billing" -Command "Get-Content -Path $(($mockResult | Get-Item).FullName)"
+    MockCall -Command "gh api /orgs/$owner1/copilot/billing" -filename 'CopilotBillingOrg.json'
+    MockCall -Command "gh api /orgs/$owner2/copilot/billing" -filename 'CopilotBillingOrg.json'
 
     $result = $owner1,$owner2 | Get-CopilotBilling
 
     Assert-Count -Expected 2 -Presented $result.Org
     Assert-Contains -Expected $owner1 -Presented $result.Org
     Assert-Contains -Expected $owner2 -Presented $result.Org
-
 }

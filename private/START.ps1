@@ -6,7 +6,7 @@ if (! $LOADED_EARLYLOADED){
     # This is useful when you have a dependency to run
 
 
-    # Import Set-MyInvokeCommandAlias
+    # Load Invoke helper functions
     . $(($PSScriptRoot | Join-Path -ChildPath SetMyInvokeCommandAlias.ps1 | Get-Item).FullName)
 
 }

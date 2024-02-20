@@ -1,7 +1,13 @@
 
 function CopilotHelperTest_GetCopilotUsageDiagramOrg_Totals{
 
-    $result = Get-CopilotUsageOrgDiagramTotals -Owner someOrgName
+    Reset-InvokeCommandMock
+
+    $owner = 'someOrgName'
+
+    MockCall -Command "gh api orgs/$owner/copilot/usage" -filename $OrgTestDataFile
+
+    $result = Get-CopilotUsageOrgDiagramTotals -Owner $owner
 
     Assert-Count -Expected 1 -Presented $result
 
@@ -62,7 +68,13 @@ function CopilotHelperTest_GetCopilotUsageDiagramOrg_Breakdown{
 
 # ```
 
-    $result = Get-CopilotUsageOrgDiagramBreakdown -Owner someOrgName
+    Reset-InvokeCommandMock
+
+    $owner = 'someOrgName'
+
+    MockCall -Command "gh api orgs/$owner/copilot/usage" -filename $OrgTestDataFile
+
+    $result = Get-CopilotUsageOrgDiagramBreakdown -Owner $owner
 
     @(
         # Userts
@@ -111,8 +123,13 @@ function CopilotHelperTest_GetCopilotUsageDiagramEnterprise_Breakdown{
 #   "typescript": 984
 
 # ```
+    Reset-InvokeCommandMock
 
-    $result = Get-CopilotUsageEnterpriseDiagramBreakdown -Enterprise someEnterpriseName
+    $owner = 'someEnterpriseName'
+
+    MockCall -Command "gh api enterprises/$owner/copilot/usage" -filename $EnterpriseTestDataFile
+
+    $result = Get-CopilotUsageEnterpriseDiagramBreakdown -Enterprise $owner
 
     @(
         # Userts
