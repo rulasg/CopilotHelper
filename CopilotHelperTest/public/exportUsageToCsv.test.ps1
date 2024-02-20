@@ -12,7 +12,12 @@ function CopilotHelperTest_ExportCopilotUsageOrg_Totals{
 
 function CopilotHelperTest_ExportCopilotUsageOrg_Breakdown{
 
-    Export-CopilotUsageOrgBreakdown -Owner someOrgName -OutputFile breakdown.csv
+    Reset-InvokeCommandMock
+    $owner = 'someOrgName'
+
+    MockCall -Command "gh api orgs/$owner/copilot/usage" -filename $OrgTestDataFile
+
+    Export-CopilotUsageOrgBreakdown -Owner $owner -OutputFile breakdown.csv
 
     Assert-ItemExist -Path breakdown.csv
 
@@ -28,7 +33,12 @@ function CopilotHelperTest_ExportCopilotUsageOrg_Breakdown{
 
 function CopilotHelperTest_ExportCopilotUsageEnterprise_Breakdown{
 
-    Export-CopilotUsageEnterpriseBreakdown -Enterprise someEnterpriseName -OutputFile breakdown.csv
+    Reset-InvokeCommandMock
+    $owner = 'someEnterpriseName'
+
+    MockCall -Command "gh api enterprises/$owner/copilot/usage" -filename $EnterpriseTestDataFile
+
+    Export-CopilotUsageEnterpriseBreakdown -Enterprise $owner -OutputFile breakdown.csv
 
     Assert-ItemExist -Path breakdown.csv
 
