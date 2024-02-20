@@ -20,6 +20,9 @@ function CopilotHelperTest_RemoveBillingSeat_WrongSettings{
     Reset-InvokeCommandMock
 
     $owner ='solidifydemo' ; $user= 'raulgeu'
+
+    $errorMessage = "Error calling RemoveBillingUser with [$owner] and [$user] - Your organization has enabled Copilot access for all members. Enable access for selected members in order to manage seats via the API."
+
     
     MockCall -filename 'CopilotBillingUser_WrongSettings.json' -Command 'gh api --method DELETE /orgs/solidifydemo/copilot/billing/selected_users -f "selected_usernames[]=raulgeu"'
 
