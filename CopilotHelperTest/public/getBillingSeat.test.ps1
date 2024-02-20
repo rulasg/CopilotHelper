@@ -4,7 +4,7 @@ function CopilotHelperTest_GetCopilotBillingSeat_Success{
 
     $owner = "solidifydemo"
 
-    MockCall -command "gh api /orgs/$owner/copilot/billing/seat" -filename 'CopilotbillingOrgSeats.json'
+    MockCall -command "gh api /orgs/$owner/copilot/billing/seats" -filename 'CopilotbillingOrgSeats.json'
 
     $result = Get-CopilotBillingSeats -Owner $owner
 
@@ -19,13 +19,29 @@ function CopilotHelperTest_GetCopilotBillingSeat_Show_InactiveThisCycle{
 
     $owner = "solidifydemo"
 
-    MockCall -command "gh api /orgs/$owner/copilot/billing/seat" -filename 'CopilotbillingOrgSeats.json'
+    MockCall -command "gh api /orgs/$owner/copilot/billing/seats" -filename 'CopilotbillingOrgSeats.json'
 
     $seats = Get-CopilotBillingSeats -Owner $owner
 
-    $result = $seats | Show-InactiveThisCycle
+    $result = $seats | Show-SeatsInactiveThisCycle
 
     Assert-Count -Expected 19 -Presented $result
+
+}
+
+function CopilotHelperTest_GetCopilotBillingSeat_Show_ActiveThisCycle{
+
+    Reset-InvokeCommandMock
+
+    $owner = "solidifydemo"
+
+    MockCall -command "gh api /orgs/$owner/copilot/billing/seats" -filename 'CopilotbillingOrgSeats.json'
+
+    $seats = Get-CopilotBillingSeats -Owner $owner
+
+    $result = $seats | Show-SeatsActiveThisCycle
+
+    Assert-Count -Expected 26 -Presented $result
 
 }
 
@@ -35,11 +51,11 @@ function CopilotHelperTest_GetCopilotBillingSeat_Show_AddedThisCycle{
 
     $owner = "solidifydemo"
 
-    MockCall -command "gh api /orgs/$owner/copilot/billing/seat" -filename 'CopilotbillingOrgSeats.json'
+    MockCall -command "gh api /orgs/$owner/copilot/billing/seats" -filename 'CopilotbillingOrgSeats.json'
 
     $seats = Get-CopilotBillingSeats -Owner $owner
 
-    $result = $seats | Show-AddedThisCycle
+    $result = $seats | Show-SeatsAddedThisCycle
 
     Assert-Count -Expected 3 -Presented $result
 

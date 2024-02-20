@@ -1,4 +1,4 @@
-Set-MyInvokeCommandAlias -Alias CopilotBillingSeat -Command 'gh api /orgs/{owner}/copilot/billing/seat'
+Set-MyInvokeCommandAlias -Alias CopilotBillingSeat -Command 'gh api /orgs/{owner}/copilot/billing/seats'
 
 <#
 .SYNOPSIS
@@ -51,7 +51,7 @@ function Get-CopilotBillingSeats{
 .SYNOPSIS
     Show the inactive seats for the current cycle.
 #>
-function Show-InactiveThisCycle {
+function Show-SeatsInactiveThisCycle {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory,ValueFromPipeline)][object]$Seat
@@ -76,13 +76,13 @@ function Show-InactiveThisCycle {
             Write-Output $seat
         }
     }
-} Export-ModuleMember -Function Show-InactiveThisCycle
+} Export-ModuleMember -Function Show-SeatsInactiveThisCycle
 
 <#
 .SYNOPSIS
     Show the added seats for the current cycle.
 #>
-function Show-AddedThisCycle {
+function Show-SeatsAddedThisCycle {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory,ValueFromPipeline)][object]$Seat
@@ -102,13 +102,13 @@ function Show-AddedThisCycle {
             Write-Output $seat
         }
     }
-} Export-ModuleMember -Function Show-AddedThisCycle
+} Export-ModuleMember -Function Show-SeatsAddedThisCycle
 
 <#
 .SYNOPSIS
     Show the active seats for the current cycle.
 #>
-function Show-ActiveThisCycle {
+function Show-SeatsActiveThisCycle {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory,ValueFromPipeline)][object]$Seat
@@ -123,18 +123,12 @@ function Show-ActiveThisCycle {
 
         "$($seat.Assignee) last activity was $($seat.Last_activity_at)" | Write-Verbose
 
-        # No activity recorded
-        if($null -eq $seat.Last_activity_at){
-            Write-Output $seat
-            return
-        }
-
         # Last activity last day last month
-        if ($seat.last_activity_at -lt $startCycleDateTime) {
+        if ($seat.last_activity_at -gt $startCycleDateTime) {
             Write-Output $seat
         }
     }
-} Export-ModuleMember -Function Show-InactiveThisCycle
+} Export-ModuleMember -Function Show-SeatsActiveThisCycle
 
 function Get-StartCycleDateTime{
     # Cycle starts at 1am last day of the previouse month.

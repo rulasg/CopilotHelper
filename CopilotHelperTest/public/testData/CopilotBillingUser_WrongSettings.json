@@ -1,0 +1,4 @@
+{
+    "message": "Your organization has enabled Copilot access for all members. Enable access for selected members in order to manage seats via the API.",
+    "documentation_url": "https://docs.github.com/copilot/configuring-github-copilot/configuring-github-copilot-settings-in-your-organization#enabling-access-to-github-copilot-for-specific-users-in-your-organization"
+}
