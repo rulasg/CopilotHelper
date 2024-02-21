@@ -11,12 +11,15 @@ function Get-Ratio($a, $b){
     if($b -eq 0){
         return 0
     }
-    return $a / $b
+
+    $ret = $a / $b | Get-Round
+
+    return $ret
 }
 
 function Get-Calcs($a){
 
-    # iterate $a and calculate agerage, total and count
+    # iterate $a and calculate average, total and count
     $total = 0
     $count = 0
     $a | ForEach-Object{
@@ -27,7 +30,7 @@ function Get-Calcs($a){
 
     return @{
         average = $average
-        average_round = [math]::Round($average)
+        average_round = $average | Get-Round
         total = $total
         count = $count
     }
@@ -45,7 +48,7 @@ function Get-CalcsWithRatios{
     $calcs = Get-Calcs $values
 
     $calcs["ratio"] = Get-Ratio $calcs.average $total
-    $calcs["ratio_round"] = [math]::Round($calcs.ratio,4)
+    $calcs["ratio_round"] = $calcs.ratio | Get-Round
 
     return $calcs
 }
