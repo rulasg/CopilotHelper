@@ -7,20 +7,34 @@ Set-MyInvokeCommandAlias -Alias AddBillingUser -Command 'gh api --method POST /o
 <#
 .SYNOPSIS
     Remove a user from the billing seats for an organization.
+.EXAMPLE
+    Remove-CopilotBillingUser -Owner 'github' -User 'octocat'
+    "user1","user2" | Remove-CopilotBillingUser -Owner 'github'
+    Get-CopilotBillingSeats -Owner 'github' | Show-SeatsActiveThisCycle | Remove-CopilotBillingUser
 #>
 function Remove-CopilotBillingUser{
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
-        [Parameter()][string]$Owner,
-        [Parameter(Mandatory,ValueFromPipeline,ValueFromPipelineByPropertyName)][string]$User
+        [Parameter(ValueFromPipelineByPropertyName)][string]$Owner,
+        [Parameter(Mandatory,ValueFromPipeline,ValueFromPipelineByPropertyName)][Alias("Assignee")][string]$User
     )
 
+    begin{
+        $seats_cancelled = 0
+    }
+
     process {
-        $environment = Get-EnvironmentOwner -Owner $Owner
+        "Removing user [$user] from billing seats for [$owner]" | Write-Verbose
 
-        $param = @{'owner' = $environment; 'user' = $User}
+        $param = @{'owner' = $owner; 'user' = $User}
 
-        $result = Invoke-MyCommandJson -Command RemoveBillingUser -Param $param
+        if ($PSCmdlet.ShouldProcess("user [$user] for [$owner]", "RemoveBillingUser")) {
+            $result = Invoke-MyCommandJson -Command RemoveBillingUser -Param $param
+        } else{
+            $result = [PSCustomObject]@{
+                seats_cancelled = 1
+            }
+        }
 
         if($null -eq $result){
             "Error calling RemoveBillingUser with [$owner] and [$user]" | Write-Error
@@ -40,27 +54,47 @@ function Remove-CopilotBillingUser{
             throw "we should never reach this point"
         }
 
-        return $ret
+        $seats_cancelled += $ret.seats_cancelled
+    }
+    end{
+        $finalRet = [PSCustomObject]@{
+            seats_cancelled = $seats_cancelled
+        }
+        return $finalRet
     }
 } Export-ModuleMember -Function Remove-CopilotBillingUser
 
 <#
 .SYNOPSIS
     Add a user to the billing seats for an organization.
+.EXAMPLE
+    Add-CopilotBillingUser -Owner 'github' -User 'octocat'
+    "user1","user2" | Add-CopilotBillingUser -Owner 'github'
+    Get-CopilotBillingSeats -Owner 'github' | Show-SeatsActiveThisCycle | Add-CopilotBillingUser
 #>
 function Add-CopilotBillingUser{
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
-        [Parameter()][string]$Owner,
-        [Parameter(Mandatory,ValueFromPipeline,ValueFromPipelineByPropertyName)][string]$User
+        [Parameter(ValueFromPipelineByPropertyName)][string]$Owner,
+        [Parameter(Mandatory,ValueFromPipeline,ValueFromPipelineByPropertyName)][Alias("Assignee")][string]$User
     )
 
+    begin{
+        $seats_created = 0
+    }
+
     process {
-        $environment = Get-EnvironmentOwner -Owner $Owner
+        "Removing user [$user] from billing seats for [$owner]" | Write-Verbose
 
-        $param = @{'owner' = $environment; 'user' = $User}
+        $param = @{'owner' = $owner; 'user' = $User}
 
-        $result = Invoke-MyCommandJson -Command AddBillingUser -Param $param
+        if ($PSCmdlet.ShouldProcess("user [$user] for [$owner]", "AddBillingUser")) {
+            $result = Invoke-MyCommandJson -Command AddBillingUser -Param $param
+        } else{
+            $result = [PSCustomObject]@{
+                seats_created = 1
+            }
+        }
 
         if($null -eq $result){
             "Error calling AddBillingUser with [$owner] and [$user]" | Write-Error
@@ -80,6 +114,13 @@ function Add-CopilotBillingUser{
             throw "we should never reach this point"
         }
 
-        return $ret
+        $seats_created += $ret.seats_created
+    }
+
+    end{
+        $finalRet = [PSCustomObject]@{
+            seats_created = $seats_created
+        }
+        return $finalRet
     }
 } Export-ModuleMember -Function Add-CopilotBillingUser
