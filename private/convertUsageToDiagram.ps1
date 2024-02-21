@@ -1,6 +1,8 @@
 <#
 .SYNOPSIS
     Convert the totals of Copilot usage data to Diagram.
+.EXAMPLE
+    Get-CopilotUsageOrg -Owner 'github' | Convert-UsageToDiagramTotals
 #>
 function Convert-UsageToDiagramTotals{
     [CmdletBinding()]
@@ -53,6 +55,8 @@ function Convert-UsageToDiagramTotals{
 <#
 .SYNOPSIS
     Covnerts the breakdown of Copilot usage data to Markdown Table.
+.EXAMPLE
+    Get-CopilotUsageOrg -Owner 'github' | Convert-UsageToDiagramBreakdown
 #>
 function Convert-UsageToDiagramBreakdown{
     [CmdletBinding()]
