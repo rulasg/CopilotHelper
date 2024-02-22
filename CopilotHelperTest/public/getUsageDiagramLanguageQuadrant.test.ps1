@@ -26,13 +26,16 @@ quadrantChart
 
 '@
 
-    # Compare both string line by line to avoid differnnces with new lines charecters between systems
+    # Compare both string line by line. Mermaid has no strict line order
 
     $resultList = $result -split [System.Environment]::NewLine
     $expectedList = $expected -split [System.Environment]::NewLine
 
-    for ($i = 0; $i -lt $resultList.Length; $i++) {
-        Assert-AreEqual -Expected $expectedList[$i] -Presented $resultList[$i]
-    }
+    Assert-Count -Expected 14 -Presented $resultList -Comment "Expected 14 lines in the result"
 
+    Assert-AreEqual -Expected $expectedList.Length -Presented $resultList.Length
+
+    for ($i = 0; $i -lt $expectedList.Length; $i++) {
+        Assert-IsTrue -Condition ($resultList -contains $expectedList[$i]) -Comment "Comparing line $i"
+    }
 }
