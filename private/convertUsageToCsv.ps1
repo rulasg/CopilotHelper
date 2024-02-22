@@ -1,6 +1,8 @@
 <#
 .SYNOPSIS
     Covnerts the totals of Copilot usage data to CSV.
+.EXAMPLE
+    Get-CopilotUsageOrg -Owner 'github' | Convert-UsageToCsvTotals
 #>
 function Convert-UsageToCsvTotals{
     [CmdletBinding()]
@@ -26,6 +28,8 @@ function Convert-UsageToCsvTotals{
 <#
 .SYNOPSIS
     Covnerts the breakdown of Copilot usage data to CSV.
+.EXAMPLE
+    Get-CopilotUsageOrg -Owner 'github' | Convert-UsageToCsvBreakdown
 #>
 function Convert-UsageToCsvBreakdown{
     [CmdletBinding()]

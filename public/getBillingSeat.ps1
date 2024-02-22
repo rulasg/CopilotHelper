@@ -3,6 +3,8 @@ Set-MyInvokeCommandAlias -Alias CopilotBillingSeat -Command 'gh api /orgs/{owner
 <#
 .SYNOPSIS
     Get the billing seats information for an organization.
+.EXAMPLE
+    Get-CopilotBillingSeats -Owner 'github'
 #>
 function Get-CopilotBillingSeats{
     [CmdletBinding()]
@@ -39,6 +41,7 @@ function Get-CopilotBillingSeats{
                 Last_activity_editor = $seat.last_activity_editor
                 Pending_cancellation_date = $seat.pending_cancellation_date
                 Updated_at = $seat.updated_at
+                Owner = $owner
             }
         }
 
@@ -50,6 +53,8 @@ function Get-CopilotBillingSeats{
 <#
 .SYNOPSIS
     Show the inactive seats for the current cycle.
+.EXAMPLE
+    Get-CopilotBillingSeats -Owner 'github' | Show-SeatsInactiveThisCycle
 #>
 function Show-SeatsInactiveThisCycle {
     [CmdletBinding()]
@@ -81,6 +86,8 @@ function Show-SeatsInactiveThisCycle {
 <#
 .SYNOPSIS
     Show the added seats for the current cycle.
+.EXAMPLE
+    Get-CopilotBillingSeats -Owner 'github' | Show-SeatsAddedThisCycle
 #>
 function Show-SeatsAddedThisCycle {
     [CmdletBinding()]
@@ -107,6 +114,8 @@ function Show-SeatsAddedThisCycle {
 <#
 .SYNOPSIS
     Show the active seats for the current cycle.
+.EXAMPLE
+    Get-CopilotBillingSeats -Owner 'github' | Show-SeatsActiveThisCycle
 #>
 function Show-SeatsActiveThisCycle {
     [CmdletBinding()]

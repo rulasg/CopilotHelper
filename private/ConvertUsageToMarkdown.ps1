@@ -1,6 +1,8 @@
 <#
 .SYNOPSIS
     Covnerts the totals of Copilot usage data to Markdown Table.
+.EXAMPLE
+    Get-CopilotUsageOrg -Owner 'github' | Convert-UsageToMarkdownTotals
 #>
 function Convert-UsageToMarkdownTotals{
     [CmdletBinding()]
@@ -26,6 +28,8 @@ function Convert-UsageToMarkdownTotals{
 <#
 .SYNOPSIS
     Covnerts the breakdown of Copilot usage data to Markdown Table.
+.EXAMPLE
+    Get-CopilotUsageOrg -Owner 'github' | Convert-UsageToMarkdownBreakdown
 #>
 function Convert-UsageToMarkdownBreakdown{
     [CmdletBinding()]

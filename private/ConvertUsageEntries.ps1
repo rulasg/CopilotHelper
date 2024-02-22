@@ -1,6 +1,8 @@
 <#
 .SYNOPSIS
-    Covnerts the totals of Copilot usage data .
+    Covnerts the totals of Copilot usage data.
+.EXAMPLE
+    Get-CopilotUsageOrg -Owner 'github' | Convert-UsageToTotals
 #>
 function Convert-UsageToTotals{
     [CmdletBinding()]
@@ -38,7 +40,9 @@ function Convert-UsageToTotals{
 
 <#
 .SYNOPSIS
-    Covnerts the breakdown of Copilot usage data .
+    Covnerts the breakdown of Copilot usage data.
+.EXAMPLE
+    Get-CopilotUsageOrg -Owner 'github' | Convert-UsageToBreakdown
 #>
 function Convert-UsageToBreakdown{
     [CmdletBinding()]

@@ -1,6 +1,8 @@
 <#
 .SYNOPSIS
     Covnerts the breakdown of Copilot usage data to Quadrant Diagrams.
+.EXAMPLE
+    Get-CopilotUsageOrg -Owner 'github' | Convert-UsageToDiagramLanguageQuadrant
 #>
 function Convert-UsageToDiagramLanguageQuadrant{
     [CmdletBinding()]
