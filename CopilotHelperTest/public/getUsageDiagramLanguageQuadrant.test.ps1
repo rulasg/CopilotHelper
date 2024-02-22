@@ -26,5 +26,13 @@ quadrantChart
 
 '@
 
-    Assert-AreEqual -Expected $expected -Presented $result
+    # Compare both string line by line to avoid differnnces with new lines charecters between systems
+
+    $resultList = $result -split [System.Environment]::NewLine
+    $expectedList = $expected -split [System.Environment]::NewLine
+
+    for ($i = 0; $i -lt $resultList.Length; $i++) {
+        Assert-AreEqual -Expected $expectedList[$i] -Presented $resultList[$i]
+    }
+
 }
