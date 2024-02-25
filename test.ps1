@@ -91,12 +91,12 @@ function Import-RequiredModule{
             $AllowPrerelease = ($AllowPrerelease -or ($null -ne $V[1]))
         }
 
-        $module = Import-Module $ModuleName -PassThru -ErrorAction SilentlyContinue -RequiredVersion:$semVer
+        $module = Import-Module $ModuleName -PassThru -ErrorAction SilentlyContinue -MinimumVersion:$semVer
 
         if ($null -eq $module) {
             "Installing module Name[{0}] Version[{1}] AllowPrerelease[{2}]" -f $ModuleName, $ModuleVersion, $AllowPrerelease | Write-Host -ForegroundColor DarkGray
             $installed = Install-Module -Name $ModuleName -Force -AllowPrerelease:$AllowPrerelease -passThru -RequiredVersion:$ModuleVersion
-            $module = Import-Module -Name $installed.Name -RequiredVersion ($installed.Version.Split('-')[0]) -Force -PassThru
+            $module = $installed | ForEach-Object {Import-Module -Name $_.Name -RequiredVersion ($_.Version.Split('-')[0]) -Force -PassThru}
         }
 
         "Imported module Name[{0}] Version[{1}] PreRelease[{2}]" -f $module.Name, $module.Version, $module.privatedata.psdata.prerelease | Write-Host -ForegroundColor DarkGray
@@ -118,7 +118,8 @@ function Get-RequiredModule{
 
     # Required Modules
     $localPath = $PSScriptRoot
-    $requiredModule = $localPath | Join-Path -child "*.psd1" |  Get-Item | Import-PowerShellDataFile | Select-Object -ExpandProperty requiredModules
+    $manifest = $localPath | Join-Path -child "*.psd1" |  Get-Item | Import-PowerShellDataFile
+    $requiredModule = $null -eq $manifest.RequiredModules ? @() : $manifest.RequiredModules
 
     # Convert to hashtable
     $ret = @()

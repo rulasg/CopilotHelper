@@ -51,7 +51,8 @@ Description = 'Commands to help managing a GitHub Copilot service'
 # ProcessorArchitecture = ''
 
 # Modules that must be imported into the global environment prior to importing this module
-RequiredModules = @(@{ModuleName="InvokeHelper"; ModuleVersion="1.1.7"})
+# RequiredModules = @(@{ModuleName="InvokeHelper"; ModuleVersion="1.1.7"})
+RequiredModules = @(@{ModuleName="InvokeHelper"; ModuleVersion="1.2"})
 
 # Assemblies that must be loaded prior to importing this module
 # RequiredAssemblies = @()
